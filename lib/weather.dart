@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
-import 'menu/menu_itens.dart';
+import 'pages/menu/menu_itens.dart';
 
 final atualDate = DateFormat.yMMMd().format(DateTime.now());
 dynamic objLocation;
