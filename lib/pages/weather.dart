@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
@@ -71,80 +72,167 @@ class _WeatherPageState extends State<WeatherPage> {
                 children: [
                   Expanded(
                     child: ListView(
-                      children: <Widget>[
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                          Text('Today, $atualDate',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600
-                          ),
-                            textAlign: TextAlign.left,
-                        ),
+                            children: <Widget>[
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Today, $atualDate',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
                       
-                        // dropdown aq
-                        GestureDetector(
-                          onTap: () => showPopover(context: context, bodyBuilder:(context)=>const MenuItens(),
-                          width: 220,
-                          height: 120),
-                          child: const Icon(Icons.view_headline_rounded, color: Colors.white,),
-                        ),
-                        ]),
+                                // dropdown aq
+                                GestureDetector(
+                                  onTap: () => showPopover(context: context, bodyBuilder:(context)=>const MenuItens(),
+                                  width: 220,
+                                  height: 120),
+                                  child: const Icon(Icons.view_headline_rounded, color: Colors.white,),
+                                ),
+                                ]),
                         
-                        const SizedBox(height: 10),
+                              const SizedBox(height: 10),
                         
-                         Row(mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                          const Icon(Icons.location_on_outlined,
-                          color: Colors.white54,),
-                          Text(objLocation.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600
-                          ),
-                            textAlign: TextAlign.left,
-                        ),
-                          
-                          //Text('teste')
-                        ],),
-                        
-                        const SizedBox(height: 60),
+                              Row(mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Icon(Icons.location_on_outlined,
+                                    color: Colors.white54),
 
-                         Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            SizedBox(
-                              width:280,
-                              height:280,
-                              child:Image.asset('images/img_nuvem_escura.png')),
-                            
-                            SizedBox(
-                              width:190,
-                              height:190,
-                              child:Image.asset('images/img_nuvem_escura.png' )),
+                                  Text(
+                                    objLocation.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                    textAlign: TextAlign.left,
+                                ),
+                                
+                              ],),
+                              
+                              const SizedBox(height: 50),
 
-                             const SizedBox(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 100),
-                                child:  Text('26',
-                                  style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 70,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Arial',
-                              ),
-                                  textAlign: TextAlign.center)))
-                          ],
-                        ),
+                                Stack(
+                                  alignment: Alignment.bottomRight,
+                                  children: [
+                                    SizedBox(
+                                      width:280,
+                                      height:280,
+                                      child:Image.asset('images/cloud_grey.png')),
+                                    
+                                    SizedBox(
+                                      width:190,
+                                      height:190,
+                                      child:Image.asset('images/cloud_grey.png' )),
+
+                                    const SizedBox(
+                                      child: Padding(
+                                              padding: EdgeInsets.only(right: 100),
+                                              child:  Text('25°',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 65,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Arial',
+                                              ),
+                                              textAlign: TextAlign.center))
+                                              )
+                                          ],
+                                        ),
                                       
-                        const SizedBox(height: 20),
-                        
-                  
-                
-              ]),
-            )],
+                              const Text(
+                                'Cloudy',
+                                style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600
+                                ),
+                                textAlign: TextAlign.center),
+                              
+                              const Text(
+                                'Feels like 20°',
+                                style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600
+                                ),
+                                textAlign: TextAlign.center),
+
+                              const SizedBox(height: 20),
+
+                              const Row(
+                                  children:[
+                                    Icon( Icons.water_drop, color:  Colors.white),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      '61%',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600
+                                        ),
+                                      textAlign: TextAlign.center),
+                                    
+                                    SizedBox(width: 50),
+                                    
+                                    Icon( Icons.air, color:  Colors.white,),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      '5 Km/h',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600
+                                        ),
+                                      textAlign: TextAlign.center),
+                                    
+                                    SizedBox(width: 15),
+
+                                    Icon( Icons.av_timer_rounded, color:  Colors.white,),
+                                    SizedBox(width:5),
+                                    Text(
+                                      '542 mbar',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600
+                                        ),
+                                      textAlign: TextAlign.center),
+                                  ]),
+
+                              const SizedBox(height: 20),
+                            
+                            // isso aq quebrou o cod, mas preciso conseguir scrollar os cards
+                            SizedBox(
+                              child:
+                              Expanded(
+                                child: 
+                                  ListView(
+                                    shrinkWrap: true,
+                                    scrollDirection : Axis.horizontal,
+                                    children: const <Widget>[
+                                        Card(
+                                          color:Colors.white70,
+                                          child: SizedBox(
+                                              height:90,
+                                              width: 50,
+                                              child: 
+                                                Column(
+                                                  children: [
+                                                    Text('N ta indo esse crl')
+                                                  ],
+                                                ),
+                                              ))
+                                      ],
+                                    )))
+                          
+                                      
+                          
+                        ]),
+                      )],
       )
       ),
     );
