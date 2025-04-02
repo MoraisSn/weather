@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- referente ao geo locator  -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> p receber atualizacao enquanto o app estiver em 2 plano  -->
     <application
         android:label="weather"
         android:name="${applicationName}"
@@ -30,4 +33,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
 </manifest>
