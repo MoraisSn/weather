@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'pages/weather.dart';
 
 class MyApp extends StatefulWidget {

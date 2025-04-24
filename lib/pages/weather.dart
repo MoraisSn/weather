@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
 import '../menu/menu_itens.dart';
+import '../business_rule/get_location.dart';
 
 final atualDate = DateFormat.yMMMd().format(DateTime.now());
-dynamic objLocation;
+
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -16,47 +16,22 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  String data = '';
-// função assíncrona,(executa operações sem bloquear o resto do código) Ela retorna um Future<Position>, que é um objeto que eventualmente conterá a posição atual do dispositivo.
-  Future <Position> determinePosition() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-
-  // Verifica se o serviço de localização está desativado e retorna um erro
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    return Future.error('Location services are disabled.');
-  }
-  // recebe um valor futuro da permissao
-  permission = await Geolocator.checkPermission();
-
-  // se a permissao for negada ele 2ª vez e retorna um erro
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      return Future.error('Location permissions are denied');
-    }
-  }
-  if (permission == LocationPermission.deniedForever) {
-    return Future.error(
-      'Location permissions are permanently denied, we cannot request permissions.');
-  }
-  // se ele n liberar a gente pode pegar a permissão de sampa
+  String locationUser ='';  
   
-  // se for liberada ele retorna
-  return await Geolocator.getCurrentPosition(timeLimit:const Duration(seconds: 30));
-  // return Geolocator.getCurrentPosition(desiredAccuracy:LocationAccuracy.best);
-}
+  void _updateLocation() async {
+    final objLocation = await GetCurrentLocation().determinePosition();
+    setState(() {
+      locationUser=objLocation.toString();
+    });
+  }
+
   @override
   void initState() {
-      super.initState();
-      if (data.isEmpty)
-      {
-        objLocation=determinePosition();
+    super.initState();
+    _updateLocation();
+  }
 
-      }
 
-    }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +77,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     color: Colors.white54),
 
                                   Text(
-                                    objLocation.toString(),
+                                    locationUser,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 17,
@@ -121,12 +96,12 @@ class _WeatherPageState extends State<WeatherPage> {
                                     SizedBox(
                                       width:280,
                                       height:280,
-                                      child:Image.asset('images/cloud_grey.png')),
+                                      child:Image.asset('images/cloud_grey.png')),//TODO: Ajustar essas imagens centralizadas
                                     
                                     SizedBox(
                                       width:190,
                                       height:190,
-                                      child:Image.asset('images/cloud_grey.png' )),
+                                      child:Image.asset('images/cloud_grey.png' )),//TODO: Ajustar essas imagens centralizadas
 
                                     const SizedBox(
                                       child: Padding(
@@ -142,7 +117,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                               )
                                           ],
                                         ),
-                                      
+
                               const Text(
                                 'Cloudy',
                                 style: TextStyle(
@@ -206,28 +181,28 @@ class _WeatherPageState extends State<WeatherPage> {
                               const SizedBox(height: 20),
                             
                             // isso aq quebrou o cod, mas preciso conseguir scrollar os cards
-                            SizedBox(
-                              child:
-                              Expanded(
-                                child: 
-                                  ListView(
-                                    shrinkWrap: true,
-                                    scrollDirection : Axis.horizontal,
-                                    children: const <Widget>[
-                                        Card(
-                                          color:Colors.white70,
-                                          child: SizedBox(
-                                              height:90,
-                                              width: 50,
-                                              child: 
-                                                Column(
-                                                  children: [
-                                                    Text('N ta indo esse crl')
-                                                  ],
-                                                ),
-                                              ))
-                                      ],
-                                    )))
+                            // SizedBox(
+                            //   child:
+                            //   Expanded(
+                            //     child: 
+                            //       ListView(
+                            //         shrinkWrap: true,
+                            //         scrollDirection : Axis.horizontal,
+                            //         children: const <Widget>[
+                            //             Card(
+                            //               color:Colors.white70,
+                            //               child: SizedBox(
+                            //                   height:90,
+                            //                   width: 50,
+                            //                   child: 
+                            //                     Column(
+                            //                       children: [
+                            //                         Text('N ta indo esse crl')
+                            //                       ],
+                            //                     ),
+                            //                   ))
+                            //           ],
+                            //         )))
                           
                                       
                           
