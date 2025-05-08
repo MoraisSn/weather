@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:popover/popover.dart';
 import 'package:intl/intl.dart';
+
 import '../menu/menu_itens.dart';
 import '../business_rule/get_location.dart';
 
-final atualDate = DateFormat.yMMMd().format(DateTime.now());
-
+final oCurrentDate = DateFormat.yMMMd().format(DateTime.now());
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -16,13 +15,23 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  String locationUser ='';  
+  String cLocationUser ='';
   
   void _updateLocation() async {
-    final objLocation = await GetCurrentLocation().determinePosition();
+    final coordinatesUser = await GetLocation.getCoordinates();
+    
+    final connectionUser = await GetLocation.getConnection();
+    if (connectionUser){
+      final locationFromAPI = await GetLocation.getCityWithApi(coordinatesUser[0], coordinatesUser[1]);
+      cLocationUser=locationFromAPI;
+    }else{
+      final locationFromGeolocator= await GetLocation.getCityGeolocator(coordinatesUser[0], coordinatesUser[1]);
+      cLocationUser=locationFromGeolocator;
+    }
     setState(() {
-      locationUser=objLocation.toString();
+      cLocationUser;
     });
+
   }
 
   @override
@@ -30,8 +39,6 @@ class _WeatherPageState extends State<WeatherPage> {
     super.initState();
     _updateLocation();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,7 @@ class _WeatherPageState extends State<WeatherPage> {
                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Today, $atualDate',
+                                  'Today, $oCurrentDate',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
@@ -77,7 +84,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     color: Colors.white54),
 
                                   Text(
-                                    locationUser,
+                                    cLocationUser,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 17,
@@ -128,7 +135,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                 textAlign: TextAlign.center),
                               
                               const Text(
-                                'Feels like 20°',
+                                'Minima piririm Maxima pamramram', //TODO: Trocar pra minima e maxima
                                 style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 17,
@@ -139,8 +146,9 @@ class _WeatherPageState extends State<WeatherPage> {
                               const SizedBox(height: 20),
 
                               const Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children:[
-                                    Icon( Icons.water_drop, color:  Colors.white),
+                                    Icon(Icons.water_drop, color:  Colors.white),
                                     SizedBox(width: 5),
                                     Text(
                                       '61%',

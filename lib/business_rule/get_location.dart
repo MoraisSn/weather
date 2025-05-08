@@ -7,9 +7,9 @@ import 'package:http/http.dart' as http;
 class GetLocation {
   
   static Future<bool> getConnection() async{
-    final List <ConnectivityResult> atualConnexion = await (Connectivity().checkConnectivity());//TODO: VERIFICAR COMO SERA FEITO QUANDO O DISPOSITIVO TROCAR DE LOCALIZAÇÃO
+    final List <ConnectivityResult> aCurrentConnetion = await (Connectivity().checkConnectivity());//TODO: VERIFICAR COMO SERA FEITO QUANDO O DISPOSITIVO TROCAR DE LOCALIZAÇÃO
 
-    if (atualConnexion.contains(ConnectivityResult.mobile) || atualConnexion.contains(ConnectivityResult.ethernet) || atualConnexion.contains(ConnectivityResult.wifi)){
+    if (aCurrentConnetion.contains(ConnectivityResult.mobile) || aCurrentConnetion.contains(ConnectivityResult.ethernet) || aCurrentConnetion.contains(ConnectivityResult.wifi)){
       return true;
     }else {
       return false;
@@ -18,53 +18,51 @@ class GetLocation {
   
   static Future<List> getCoordinates() async{
   /// função assíncrona,(executa operações sem bloquear o resto do código) Ela retorna um Future<Position>, que é um objeto que eventualmente conterá a posição atual do dispositivo.
-  bool serviceEnabled;
-  LocationPermission permission;
+  bool lServiceEnabled;
+  LocationPermission oPermission;
 
   // Verifica se o serviço de localização está desativado e retorna um erro
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
+  lServiceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!lServiceEnabled) {
     return Future.error('Location services are disabled.');
   }
   // recebe um valor futuro da permissao
-  permission = await Geolocator.checkPermission();
+  oPermission = await Geolocator.checkPermission();
 
   // se a permissao for negada ele 2ª vez e retorna um erro
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
+  if (oPermission == LocationPermission.denied) {
+    oPermission = await Geolocator.requestPermission();
+    if (oPermission == LocationPermission.denied) {
       return Future.error('Location permissions are denied');
     }
   }
-  if (permission == LocationPermission.deniedForever) {
+  if (oPermission == LocationPermission.deniedForever) {
     return Future.error(
       'As permissões foram permanentes negadas. Não será possivel prosseguir.');
   }
-  // se ele n liberar a gente pode pegar a permissão de sampa
+  // TODO: se ele n liberar a gente pode pegar a permissão de sampa
   
   // se for liberada ele retorna
-  final Position coodinates = await Geolocator.getCurrentPosition();
-  return [coodinates.latitude,coodinates.longitude];
-
+  final Position oCoordinates = await Geolocator.getCurrentPosition();
+  return [oCoordinates.latitude,oCoordinates.longitude];
 }
 
   static Future<String> getCityWithApi(double latitude, double longitude) async{
-    final urlApi = Uri.parse('https://nominatim.openstreetmap.org/reverse?lat=$latitude&lon=$longitude&format=jsonv2');
-    print(urlApi);
+    final oUrlApi = Uri.parse('https://nominatim.openstreetmap.org/reverse?lat=$latitude&lon=$longitude&format=jsonv2');
   
     try{
-      final responseApi = await http.get(urlApi);
+      final oResponseApi = await http.get(oUrlApi);
 
-      if (responseApi.statusCode == 200){
-        final dataLocation = jsonDecode(responseApi.body);
-        if (dataLocation!=null && dataLocation['address']!=null){
-          return dataLocation['address']['city'] ?? dataLocation['address']['town'] ?? dataLocation['address']['village'] ?? 'Localização desconhecida';
+      if (oResponseApi.statusCode == 200){
+        final jDataLocation = jsonDecode(oResponseApi.body);
+        if (jDataLocation!=null && jDataLocation['address']!=null){
+          return jDataLocation['address']['city'] ?? jDataLocation['address']['town'] ?? jDataLocation['address']['village'] ?? 'Localização desconhecida';
         
         }else{
           return 'Localização não encontrada';
         }
     }else{
-        print('Erro na requisição da API ${responseApi.statusCode}');
+        print('Erro na requisição da API ${oResponseApi.statusCode}');
         return 'Erro ao obter localização';
     }
     }catch(e){ 
@@ -73,11 +71,12 @@ class GetLocation {
     }
   }
 
-  static Future getCityGeolocator(double latitude, double longitude) async{
+  static Future<String> getCityGeolocator(double latitude, double longitude) async{
 
-    final List<Placemark> placemark = await placemarkFromCoordinates(latitude,longitude);
-    final placemarkFirt=placemark.first;
-    return placemarkFirt.locality ?? placemarkFirt.subLocality ?? placemarkFirt.administrativeArea ?? placemarkFirt.country;;
+    final List<Placemark> aPlacemark = await placemarkFromCoordinates(latitude,longitude);
+    final cPlacemarkLocation=aPlacemark.first.locality ?? aPlacemark.first.subLocality ?? aPlacemark.first.administrativeArea ?? aPlacemark.first.country;
+    
+    return cPlacemarkLocation.toString();
   }
 
 }
